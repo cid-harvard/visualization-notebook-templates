@@ -90,7 +90,6 @@ class Treemap(VisTkViz):
                   var_sort: 'nb_products',
                   var_group: '%s',
                   var_color: '%s',
-                  title: 'Countries',
                   var_size: '%s',
                   var_text: '%s',
                   time: {
@@ -162,7 +161,6 @@ class Scatterplot(VisTkViz):
         })();
         """ % (json_data, self.container_id, self.id, self.color, self.x, self.y, self.r, self.year)
 
-
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
         """
@@ -228,6 +226,80 @@ class Dotplot(VisTkViz):
 
         })();
         """ % (json_data, self.container_id, self.id, self.x, self.name, self.color, self.year)
+
+        html_src = """
+          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class Sparkline(VisTkViz):
+
+    def __init__(self, x="year", y="y", id="id", color="color", group=None, name=None, year=2013):
+        super(Sparkline, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.year = year
+        self.color = color
+        self.group = group
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'sparkline',
+              width: 800,
+              height: 100,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              var_x: 'year',
+              var_y: '%s',
+              var_text: '%s',
+              var_color: '%s',
+              items: [{
+                attr: "name",
+                marks: [{
+                  type: "diamond",
+                  width: 10,
+                  height: 10
+                }, {
+                  var_mark: '__highlighted',
+                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                  translate: [0, -20]
+                }]
+              }],
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
+
+        d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.y, self.name, self.color, self.year)
+
+        html_src = """
+          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
 
         display(Javascript(lib=self.JS_LIBS, data=js))
 
