@@ -11,9 +11,8 @@ class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
-               'http://127.0.0.1/rv/Dev/vis-toolkit/js/topojson.js',
-               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
-               #'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
+               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -97,6 +96,21 @@ class Treemap(VisTkViz):
                   var_color: '%s',
                   var_size: '%s',
                   var_text: '%s',
+                  items: [{
+                    marks: [{
+                      type: "div",
+                      filter: function(d) { return d.depth == 1 && d.dx > 30 && d.dy > 30; },
+                      translate: [5, 0]
+                    }, {
+                      type: "rect",
+                      filter: function(d, i) { return d.depth == 2; },
+                      x: 0,
+                      y: 0,
+                      width: function(d) { return d.dx; },
+                      height: function(d) { return d.dy; },
+                      fill: function(d, i, vars) { return d['color']; }
+                    }]
+                  }],
                   time: {
                     var_time: 'year',
                     current_time: %s
@@ -175,12 +189,13 @@ class Scatterplot(VisTkViz):
 
 class Dotplot(VisTkViz):
 
-    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013):
+    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[]):
         super(Dotplot, self).__init__()
         self.id = id
         self.x = x
         self.year = year
         self.color = color
+        self.selection = selection
 
         if group is None:
             self.group = id
@@ -218,7 +233,7 @@ class Dotplot(VisTkViz):
                 attr: "name",
                 marks: [{
                   type: "diamond",
-                  fill: function(d, i, vars) { return d[vars.var_color]; }
+                  fill: function(d, i, vars) { return d['color']; }
                 }, {
                   var_mark: '__highlighted',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
@@ -229,13 +244,15 @@ class Dotplot(VisTkViz):
                 var_time: 'year',
                 current_time: %s,
                 parse: function(d) { return d; }
-              }
+              },
+              selection: %s,
             });
 
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.x, self.name, self.color, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.x, self.name, self.color,
+          self.year, self.selection)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
@@ -316,15 +333,12 @@ class Sparkline(VisTkViz):
 class Geomap(VisTkViz):
 
     WORLD_JSON = open(os.path.join(path, "../sourcedata/geomap/world-110m.json")).read()
-    # WORLD_NAME = open(os.path.join(path, "../sourcedata/geomap/world-country-names.tsv")).read()
 
     WORLD_NAME = []
     with open(os.path.join(path, "../sourcedata/geomap/world-country-names.tsv")) as f:
         f_tsv = csv.reader(f, delimiter='\t')
         for row in f_tsv:
-          a = {}
-          a[row[0]] = row[1]
-          WORLD_NAME.append(a)
+          WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
     def __init__(self, id="id", color="color", name=None, year=2013):
         super(Geomap, self).__init__()
@@ -402,12 +416,13 @@ class Geomap(VisTkViz):
 
 class Linechart(VisTkViz):
 
-    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None):
+    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None, selection=[]):
         super(Linechart, self).__init__()
         self.id = id
         self.x = x
         self.y = y
         self.group = group
+        self.selection = selection
 
         if name is None:
             self.name = id
@@ -448,12 +463,218 @@ class Linechart(VisTkViz):
                 var_time: 'year',
                 current_time: vistk.utils.max
               },
+              selection: %s,
             });
 
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.selection)
+
+        html_src = """
+          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class Grid(VisTkViz):
+
+    def __init__(self, id="id", color="color", name=None, group=None, sort=None, year=2013):
+        super(Grid, self).__init__()
+        self.id = id
+        self.year = year
+        self.color = color
+        self.sort = sort
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'grid',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              var_sort: '%s',
+              var_text: '%s',
+              var_color: '%s',
+              var_sort_asc: true,
+              var_r: 'eci',
+              items: [{
+                attr: "name",
+                marks: [{
+                  type: "circle",
+                  var_r: "eci",
+                  var_fill: "eci",
+                }, {
+                  type: "text",
+                  rotate: "-30",
+                  translate: 10
+                }, {
+                  var_mark: '__aggregated',
+                  type: d3.scale.ordinal().domain([true, false]).range(["circle", "none"]),
+                  var_fill: "eci"
+                }]
+              }],
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
+
+          d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.sort, self.name, self.color, self.year)
+
+        html_src = """
+          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class Productspace(VisTkViz):
+
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, year=2013):
+        super(Productspace, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.r = r
+        self.year = year
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'scatterplot',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              container: viz_container,
+              nodes: graph.nodes,
+              links: graph.edges,
+              data: viz_data,
+              var_id: '%s',
+              var_group: 'continent',
+              var_color: '%s',
+              var_x: '%s',
+              var_y: '%s',
+              var_r: '%s',
+              var_text: 'name',
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
+
+        d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.color, self.x, self.y, self.r, self.year)
+
+        html_src = """
+          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class Stackedgraph(VisTkViz):
+
+    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None, selection=[]):
+        super(Stackedgraph, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.group = group
+        self.selection = selection
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+          console.log("DATA", viz_data)
+          var visualization = vistk.viz()
+            .params({
+              type: 'stacked',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              var_color: '%s',
+              var_x: '%s',
+              var_y: '%s',
+              var_text: '%s',
+              y_invert: true,
+              color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
+              time: {
+                parse: d3.time.format('%%Y').parse,
+                var_time: 'year',
+                current_time: vistk.utils.max
+              },
+              selection: %s,
+            });
+
+          d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.selection)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
