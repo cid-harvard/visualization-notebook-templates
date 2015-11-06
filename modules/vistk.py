@@ -12,7 +12,7 @@ class VisTkViz(object):
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -163,7 +163,10 @@ class Scatterplot(VisTkViz):
               data: viz_data,
               var_id: '%s',
               var_group: 'continent',
+              color: function(d) { return d; },
               var_color: '%s',
+              radius_min: 10,
+              radius_max: 30,
               var_x: '%s',
               var_y: '%s',
               var_r: '%s',
@@ -181,7 +184,7 @@ class Scatterplot(VisTkViz):
         """ % (json_data, self.container_id, self.id, self.color, self.x, self.y, self.r, self.year)
 
         html_src = """
-          <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
         """
         display(HTML(data=html_src))
 
@@ -557,6 +560,8 @@ class Grid(VisTkViz):
 
 class Productspace(VisTkViz):
 
+    GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_hs4_codes.json")).read()
+
     def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, year=2013):
         super(Productspace, self).__init__()
         self.id = id
@@ -580,6 +585,12 @@ class Productspace(VisTkViz):
         js = """
         (function (){
 
+          var graph = %s;
+
+          // graph.nodes.forEach(function(node) {
+          //   node.id = node.id.slice(2,6);
+          // });
+
           var viz_data = %s;
           var viz_container = '#%s';
 
@@ -596,10 +607,28 @@ class Productspace(VisTkViz):
               var_id: '%s',
               var_group: 'continent',
               var_color: '%s',
-              var_x: '%s',
-              var_y: '%s',
-              var_r: '%s',
+              var_x: 'x',
+              var_y: 'y',
+              x_axis_show: false,
+              x_grid_show: false,
+              y_axis_show: false,
+              y_grid_show: false,
+              y_invert: true,
+              radius: 5,
+              var_group: 'community_name',
               var_text: 'name',
+              items: [{
+                marks: [{
+                  type: "circle",
+                  fill: function(d) {
+                    if(d.rca > 1) {
+                      return d.color;
+                    } else {
+                      return "#fff";
+                    }
+                  }
+                }]
+              }],
               time: {
                 var_time: 'year',
                 current_time: %s,
@@ -610,7 +639,7 @@ class Productspace(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.color, self.x, self.y, self.r, self.year)
+        """ % (self.GRAPH_DATA, json_data, self.container_id, self.id, self.color, self.year)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
