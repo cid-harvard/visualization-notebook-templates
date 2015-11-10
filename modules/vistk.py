@@ -650,13 +650,14 @@ class Productspace(VisTkViz):
 
 class Stackedgraph(VisTkViz):
 
-    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None, selection=[]):
+    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None, selection=[], year=2013):
         super(Stackedgraph, self).__init__()
         self.id = id
         self.x = x
         self.y = y
         self.group = group
         self.selection = selection
+        self.year = year
 
         if name is None:
             self.name = id
@@ -690,12 +691,12 @@ class Stackedgraph(VisTkViz):
               var_x: '%s',
               var_y: '%s',
               var_text: '%s',
-              y_invert: true,
+              y_invert: false,
               color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
               time: {
-                parse: d3.time.format('%%Y').parse,
+                parse: function(d) { return d; }, //d3.time.format('%%Y').parse,
                 var_time: 'year',
-                current_time: vistk.utils.max
+                current_time: %s
               },
               selection: %s,
             });
@@ -703,7 +704,7 @@ class Stackedgraph(VisTkViz):
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.selection)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.year, self.selection)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
