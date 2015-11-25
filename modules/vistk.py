@@ -124,10 +124,9 @@ class Treemap(VisTkViz):
 
         display(Javascript(lib=self.JS_LIBS, data=js))
 
-
 class Scatterplot(VisTkViz):
 
-    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, year=2013):
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
         super(Scatterplot, self).__init__()
         self.id = id
         self.x = x
@@ -139,6 +138,11 @@ class Scatterplot(VisTkViz):
             self.name = id
         else:
             self.name = name
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
 
         if color is None:
             self.color = id
@@ -162,7 +166,7 @@ class Scatterplot(VisTkViz):
               container: viz_container,
               data: viz_data,
               var_id: '%s',
-              var_group: 'continent',
+              var_group: '%s',
               color: function(d) { return d; },
               var_color: '%s',
               radius_min: 10,
@@ -181,7 +185,77 @@ class Scatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.color, self.x, self.y, self.r, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
+
+        html_src = """
+          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class Caterplot(VisTkViz):
+
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
+        super(Caterplot, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.r = r
+        self.year = year
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'caterplot',
+              width: 800,
+              height: 600,
+              margin: {top: 30, right: 30, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              color: d3.scale.ordinal().domain([0, 9]).range(["#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#e6550d", "#fd8d3c", "#fdae6b", "#fdd0a2", "#31a354", "#74c476", "#a1d99b", "#c7e9c0", "#756bb1", "#9e9ac8", "#bcbddc", "#dadaeb", "#636363", "#969696", "#bdbdbd", "#d9d9d9"]),
+              var_color: '%s',
+              radius_min: 10,
+              radius_max: 30,
+              var_x: '%s',
+              var_y: '%s',
+              var_r: '%s',
+              var_text: 'name',
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
+
+        d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
 
         html_src = """
           <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
@@ -570,7 +644,7 @@ class Productspace(VisTkViz):
 
     GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_hs4_codes.json")).read()
 
-    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, year=2013):
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
         super(Productspace, self).__init__()
         self.id = id
         self.x = x
@@ -582,6 +656,11 @@ class Productspace(VisTkViz):
             self.name = id
         else:
             self.name = name
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
 
         if color is None:
             self.color = id
