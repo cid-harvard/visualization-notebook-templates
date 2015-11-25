@@ -444,13 +444,13 @@ class Linechart(VisTkViz):
 
           var viz_data = %s;
           var viz_container = '#%s';
-          console.log("DATA", viz_data)
+
           var visualization = vistk.viz()
             .params({
               type: 'linechart',
               width: 800,
               height: 600,
-              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              margin: {top: 30, right: 30, bottom: 30, left: 30},
               container: viz_container,
               data: viz_data,
               var_id: '%s',
@@ -460,6 +460,14 @@ class Linechart(VisTkViz):
               var_y: '%s',
               var_text: '%s',
               y_invert: true,
+              marks: [{
+                type: 'circle',
+                fill: function(d, i, vars) { return d['color']; }
+              }, {
+                var_mark: '__highlighted',
+                type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                translate: [10, 0]
+              }],
               color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
               time: {
                 parse: d3.time.format('%%Y').parse,
@@ -627,6 +635,10 @@ class Productspace(VisTkViz):
                       return "#fff";
                     }
                   }
+                }, {
+                  var_mark: '__highlighted',
+                  type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                  translate: [10, 0]
                 }]
               }],
               time: {
