@@ -108,7 +108,7 @@ class Treemap(VisTkViz):
                       y: 0,
                       width: function(d) { return d.dx; },
                       height: function(d) { return d.dy; },
-                      fill: function(d, i, vars) { return d['color']; }
+                      fill: function(d, i, vars) { return 'red'; }
                     }]
                   }],
                   time: {
@@ -121,6 +121,11 @@ class Treemap(VisTkViz):
         })();
         """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.size,
                self.name, self.year)
+
+        html_src = """
+          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
 
         display(Javascript(lib=self.JS_LIBS, data=js))
 
