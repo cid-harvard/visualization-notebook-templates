@@ -179,7 +179,7 @@ class Scatterplot(VisTkViz):
               var_x: '%s',
               var_y: '%s',
               var_r: '%s',
-              var_text: 'name',
+              var_text: '%s',
               time: {
                 var_time: 'year',
                 current_time: %s,
@@ -190,7 +190,7 @@ class Scatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.name, self.year)
 
         html_src = """
           <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
@@ -570,12 +570,13 @@ class Linechart(VisTkViz):
 
 class Grid(VisTkViz):
 
-    def __init__(self, id="id", color="color", name=None, group=None, sort=None, year=2013):
+    def __init__(self, id="id", color="color", name=None, group=None, sort=None, r=None, year=2013):
         super(Grid, self).__init__()
         self.id = id
         self.year = year
         self.color = color
         self.sort = sort
+        self.r = r
 
         if group is None:
             self.group = id
@@ -609,21 +610,15 @@ class Grid(VisTkViz):
               var_text: '%s',
               var_color: '%s',
               var_sort_asc: true,
-              var_r: 'eci',
+              var_r: '%s',
               items: [{
                 attr: "name",
                 marks: [{
-                  type: "circle",
-                  var_r: "eci",
-                  var_fill: "eci",
+                  type: "circle"
                 }, {
-                  type: "text",
-                  rotate: "-30",
-                  translate: 10
-                }, {
-                  var_mark: '__aggregated',
-                  type: d3.scale.ordinal().domain([true, false]).range(["circle", "none"]),
-                  var_fill: "eci"
+                  var_mark: '__highlighted',
+                  type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                  translate: [10, 0]
                 }]
               }],
               time: {
@@ -636,7 +631,7 @@ class Grid(VisTkViz):
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.sort, self.name, self.color, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.sort, self.name, self.color, self.r, self.year)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
