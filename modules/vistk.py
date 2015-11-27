@@ -108,7 +108,7 @@ class Treemap(VisTkViz):
                       y: 0,
                       width: function(d) { return d.dx; },
                       height: function(d) { return d.dy; },
-                      fill: function(d, i, vars) { return 'red'; }
+                      fill: function(d, i, vars) { return d[vars.var_color]; }
                     }]
                   }],
                   time: {
@@ -315,7 +315,7 @@ class Dotplot(VisTkViz):
                 attr: "name",
                 marks: [{
                   type: "diamond",
-                  fill: function(d, i, vars) { return d['color']; }
+                  fill: function(d, i, vars) { return d[vars.var_color]; }
                 }, {
                   var_mark: '__highlighted',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
