@@ -12,7 +12,7 @@ class VisTkViz(object):
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
+               'https://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -109,6 +109,10 @@ class Treemap(VisTkViz):
                       width: function(d) { return d.dx; },
                       height: function(d) { return d.dy; },
                       fill: function(d, i, vars) { return d[vars.var_color]; }
+                    }, {
+                      var_mark: '__highlighted',
+                      type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                      translate: [10, 10]
                     }]
                   }],
                   time: {
@@ -123,7 +127,7 @@ class Treemap(VisTkViz):
                self.name, self.year)
 
         html_src = """
-          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
         """
         display(HTML(data=html_src))
 
@@ -174,12 +178,26 @@ class Scatterplot(VisTkViz):
               var_group: '%s',
               color: function(d) { return d; },
               var_color: '%s',
-              radius_min: 10,
-              radius_max: 30,
+              radius_min: 5,
+              radius_max: 20,
               var_x: '%s',
               var_y: '%s',
               var_r: '%s',
               var_text: '%s',
+              items: [{
+                marks: [{
+                  type: "circle",
+        //          fill: function(d) { return vars.color(vars.accessor_items(d)[vars.var_color]); }
+                }, {
+                  var_mark: '__selected',
+                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                  rotate: "0"
+                }, {
+                  var_mark: '__highlighted',
+                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                  rotate: "0"
+                }]
+              }],
               time: {
                 var_time: 'year',
                 current_time: %s,
@@ -193,7 +211,7 @@ class Scatterplot(VisTkViz):
         """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.name, self.year)
 
         html_src = """
-          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
         """
         display(HTML(data=html_src))
 
@@ -231,7 +249,7 @@ class Caterplot(VisTkViz):
 
           var viz_data = %s;
           var viz_container = '#%s';
-
+          console.log("DATA", viz_data)
           var visualization = vistk.viz()
             .params({
               type: 'caterplot',
@@ -242,7 +260,6 @@ class Caterplot(VisTkViz):
               data: viz_data,
               var_id: '%s',
               var_group: '%s',
-              color: d3.scale.ordinal().domain([0, 9]).range(["#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#e6550d", "#fd8d3c", "#fdae6b", "#fdd0a2", "#31a354", "#74c476", "#a1d99b", "#c7e9c0", "#756bb1", "#9e9ac8", "#bcbddc", "#dadaeb", "#636363", "#969696", "#bdbdbd", "#d9d9d9"]),
               var_color: '%s',
               radius_min: 10,
               radius_max: 30,
@@ -252,8 +269,7 @@ class Caterplot(VisTkViz):
               var_text: 'name',
               time: {
                 var_time: 'year',
-                current_time: %s,
-                parse: function(d) { return d; }
+                current_time: %s
               }
             });
 
@@ -263,7 +279,7 @@ class Caterplot(VisTkViz):
         """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
 
         html_src = """
-          <link href='http://127.0.0.1/rv/Dev/vis-toolkit/css/vistk.css' rel='stylesheet'>
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
         """
         display(HTML(data=html_src))
 
@@ -302,7 +318,7 @@ class Dotplot(VisTkViz):
               type: 'dotplot',
               width: 800,
               height: 100,
-              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              margin: {top: 10, right: 100, bottom: 30, left: 30},
               container: viz_container,
               data: viz_data,
               var_id: '%s',
@@ -529,7 +545,7 @@ class Linechart(VisTkViz):
               type: 'linechart',
               width: 800,
               height: 600,
-              margin: {top: 30, right: 30, bottom: 30, left: 30},
+              margin: {top: 30, right: 100, bottom: 30, left: 30},
               container: viz_container,
               data: viz_data,
               var_id: '%s',
@@ -617,6 +633,10 @@ class Grid(VisTkViz):
                   type: "circle"
                 }, {
                   var_mark: '__highlighted',
+                  type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                  translate: [10, 0]
+                }, {
+                  var_mark: '__selected',
                   type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
                   translate: [10, 0]
                 }]
@@ -783,9 +803,8 @@ class Stackedgraph(VisTkViz):
               var_y: '%s',
               var_text: '%s',
               y_invert: false,
-              color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
               time: {
-                parse: function(d) { return d; }, //d3.time.format('%%Y').parse,
+                parse: function(d) { return d3.time.format("%%Y").parse(d+""); },
                 var_time: 'year',
                 current_time: %s
               },
