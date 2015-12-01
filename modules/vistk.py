@@ -7,6 +7,9 @@ import csv
 import os
 path = os.path.dirname(__file__)
 
+__radius_min = 5
+__radius_max = 10
+
 class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
@@ -47,13 +50,14 @@ class VisTkViz(object):
 
 class Treemap(VisTkViz):
 
-    def __init__(self, id='id', group='group', name=None, color=None, size=None, year=1995, filter=None, sort=None):
+    def __init__(self, id='id', group='group', name=None, color=None, size=None, year=1995, filter=None, sort=None, title=''):
         super(Treemap, self).__init__()
 
         self.id = id
         self.group = group
         self.year = year
         self.sort = sort
+        self.title = title
 
         if name is None:
             self.name = id
@@ -89,6 +93,7 @@ class Treemap(VisTkViz):
                   container: viz_container,
                   height: 600,
                   width: 900,
+                  margin: {top: 20, right: 10, bottom: 10, left: 10},
                   data: viz_data,
                   var_id: '%s',
                   var_sort: '%s',
@@ -118,13 +123,14 @@ class Treemap(VisTkViz):
                   time: {
                     var_time: 'year',
                     current_time: %s
-                  }
+                  },
+                  title: '%s'
                 });
 
             d3.select(viz_container).call(visualization);
         })();
         """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.size,
-               self.name, self.year)
+               self.name, self.year, self.title)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
@@ -178,8 +184,8 @@ class Scatterplot(VisTkViz):
               var_group: '%s',
               color: function(d) { return d; },
               var_color: '%s',
-              radius_min: 5,
-              radius_max: 20,
+              radius_min: %s,
+              radius_max: %s,
               var_x: '%s',
               var_y: '%s',
               var_r: '%s',
@@ -208,7 +214,7 @@ class Scatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.name, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, __radius_min, __radius_max, self.x, self.y, self.r, self.name, self.year)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
