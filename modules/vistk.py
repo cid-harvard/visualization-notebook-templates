@@ -214,7 +214,7 @@ class Scatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, __radius_min, __radius_max, self.x, self.y, self.r, self.name, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.year)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
