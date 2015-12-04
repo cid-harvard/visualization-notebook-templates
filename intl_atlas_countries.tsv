@@ -1,0 +1,346 @@
+id	name_3char	name_en
+1	ABW	Aruba
+2	AND	Andorra
+3	AFG	Afghanistan
+4	AGO	Angola
+5	ALB	Albania
+6	ANT	Netherlands Antilles
+7	ARE	United Arab Emirates
+8	ARG	Argentina
+9	ARM	Armenia
+10	ASM	American Samoa
+11	ATG	Antigua and Barbuda
+12	AUS	Australia
+13	AUT	Austria
+14	AZE	Azerbaijan
+15	BDI	Burundi
+16	BEL	Belgium
+17	BEN	Benin
+18	BFA	Burkina Faso
+19	BGD	Bangladesh
+20	BGR	Bulgaria
+21	BHR	Bahrain
+22	BHS	Bahamas
+23	BIH	Bosnia and Herzegovina
+24	BLR	Belarus
+25	BLZ	Belize
+26	BMU	Bermuda
+27	BOL	Bolivia
+28	BRA	Brazil
+29	BRB	Barbados
+30	BRN	Brunei Darussalam
+31	BTN	Bhutan
+32	BWA	Botswana
+33	CAF	Central African Republic
+34	CAN	Canada
+35	CHE	Switzerland
+36	CHI	Channel Islands
+37	CHL	Chile
+38	CHN	China
+39	CIV	Cote d'Ivoire
+40	CMR	Cameroon
+41	COG	Congo
+42	COL	Colombia
+43	COM	Comoros
+44	CPV	Cape Verde
+45	CRI	Costa Rica
+46	CUB	Cuba
+47	CYM	Cayman Islands
+48	CYP	Cyprus
+49	CZE	Czech Republic
+50	DEU	Germany
+51	DJI	Djibouti
+52	DMA	Dominica
+53	DNK	Denmark
+54	DOM	Dominican Republic
+55	DZA	Algeria
+56	EAP	East Asia & Pacific (developing only)
+57	EAS	East Asia & Pacific (all income levels)
+58	ECA	Europe & Central Asia (developing only)
+59	ECS	Europe & Central Asia (all income levels)
+60	ECU	Ecuador
+61	EGY	Egypt
+62	EMU	Euro area
+63	ERI	Eritrea
+64	ESP	Spain
+65	EST	Estonia
+66	ETH	Ethiopia
+67	FIN	Finland
+68	FJI	Fiji
+69	FRA	France
+70	FRO	Faeroe Islands
+71	FSM	Micronesia
+72	GAB	Gabon
+73	GBR	United Kingdom
+74	GEO	Georgia
+75	GHA	Ghana
+76	GIB	Gibraltar
+77	GIN	Guinea
+78	GMB	Gambia
+79	GNB	Guinea-Bissau
+80	GNQ	Equatorial Guinea
+81	GRC	Greece
+82	GRD	Grenada
+83	GRL	Greenland
+84	GTM	Guatemala
+85	GUM	Guam
+86	GUY	Guyana
+87	HIC	High income
+88	HKG	Hong Kong
+89	HND	Honduras
+90	HPC	Heavily indebted poor countries (HIPC)
+91	HRV	Croatia
+92	HTI	Haiti
+93	HUN	Hungary
+94	IDN	Indonesia
+95	IMN	Isle of Man
+96	IND	India
+97	IRL	Ireland
+98	IRN	Iran
+99	IRQ	Iraq
+100	ISL	Iceland
+101	ISR	Israel
+102	ITA	Italy
+103	JAM	Jamaica
+104	JOR	Jordan
+105	JPN	Japan
+106	KAZ	Kazakhstan
+107	KEN	Kenya
+108	KGZ	Kyrgyzstan
+109	KHM	Cambodia
+110	KIR	Kiribati
+111	KNA	St. Kitts and Nevis
+112	KOR	Korea, Rep.
+113	KSV	Kosovo
+114	KWT	Kuwait
+115	LAC	Latin America & Caribbean (developing only)
+116	LAO	Lao PDR
+117	LBN	Lebanon
+118	LBR	Liberia
+119	LBY	Libya
+120	LCA	St. Lucia
+121	LCN	Latin America & Caribbean (all income levels)
+122	LDC	Least developed countries: UN classification
+123	LIC	Low income
+124	LIE	Liechtenstein
+125	LKA	Sri Lanka
+126	LMC	Lower middle income
+127	LMY	Low & middle income
+128	LSO	Lesotho
+129	LTU	Lithuania
+130	LUX	Luxembourg
+131	LVA	Latvia
+132	MAC	Macao
+133	MAR	Morocco
+134	MCO	Monaco
+135	MDA	Moldova
+136	MDG	Madagascar
+137	MDV	Maldives
+138	MEA	Middle East & North Africa (all income levels)
+139	MEX	Mexico
+140	MHL	Marshall Islands
+141	MIC	Middle income
+142	MKD	Macedonia
+143	MLI	Mali
+144	MLT	Malta
+145	MMR	Myanmar
+146	MNA	Middle East & North Africa (developing only)
+147	MNE	Montenegro
+148	MNG	Mongolia
+149	MNP	Northern Mariana Islands
+150	MOZ	Mozambique
+151	MRT	Mauritania
+152	MUS	Mauritius
+153	MWI	Malawi
+154	MYS	Malaysia
+155	MYT	Mayotte
+156	NAC	North America
+157	NAM	Namibia
+158	NCL	New Caledonia
+159	NER	Niger
+160	NGA	Nigeria
+161	NIC	Nicaragua
+162	NLD	Netherlands
+163	NOC	High income: nonOECD
+164	NOR	Norway
+165	NPL	Nepal
+166	NZL	New Zealand
+167	OEC	High income: OECD
+168	OMN	Oman
+169	PAK	Pakistan
+170	PAN	Panama
+171	PER	Peru
+172	PHL	Philippines
+173	PLW	Palau
+174	PNG	Papua New Guinea
+175	POL	Poland
+176	PRI	Puerto Rico
+177	PRK	Korea, Dem. Rep.
+178	PRT	Portugal
+179	PRY	Paraguay
+180	PYF	French Polynesia
+181	QAT	Qatar
+182	ROU	Romania
+183	RUS	Russia
+184	RWA	Rwanda
+185	SAS	South Asia
+186	SAU	Saudi Arabia
+187	SDN	Sudan
+188	SEN	Senegal
+189	SGP	Singapore
+190	SLB	Solomon Islands
+191	SLE	Sierra Leone
+192	SLV	El Salvador
+193	SMR	San Marino
+194	SOM	Somalia
+195	SRB	Serbia
+196	SSA	Sub-Saharan Africa (developing only)
+197	SSF	Sub-Saharan Africa (all income levels)
+198	STP	Sao Tome and Principe
+199	SUR	Suriname
+200	SVK	Slovak Republic
+201	SVN	Slovenia
+202	SWE	Sweden
+203	SWZ	Swaziland
+204	SYC	Seychelles
+205	SYR	Syrian Arab Republic
+206	TCA	Turks and Caicos Islands
+207	TCD	Chad
+208	TGO	Togo
+209	THA	Thailand
+210	TJK	Tajikistan
+211	TKM	Turkmenistan
+212	TLS	Timor-Leste
+213	TON	Tonga
+214	TTO	Trinidad and Tobago
+215	TUN	Tunisia
+216	TUR	Turkey
+217	TUV	Tuvalu
+218	TZA	Tanzania
+219	UGA	Uganda
+220	UKR	Ukraine
+221	UMC	Upper middle income
+222	URY	Uruguay
+223	USA	United States
+224	UZB	Uzbekistan
+225	VCT	St. Vincent and the Grenadines
+226	VEN	Venezuela
+227	VIR	Virgin Islands, U.S.
+228	VNM	Viet Nam
+229	VUT	Vanuatu
+230	WBG	West Bank and Gaza
+231	WLD	World
+232	WSM	Samoa
+233	YEM	Yemen
+234	ZAF	South Africa
+235	COD	Congo, Dem. Rep.
+236	ZMB	Zambia
+237	ZWE	Zimbabwe
+238	YUG	Yugoslavia, Fm
+239	DDR	Germany, Democratic Republic of
+240	FDR	Germany, Federal Republic of
+241	TWN	Taiwan
+242	BLX	Belgium-Luxembourg
+243	SUN	USSR, Fm
+244	NULL	Fr Ind O
+245	SPM	Saint Pierre and Miquelon
+246	GLP	Guadeloupe
+247	GUF	French Guiana
+248	NULL	US NES
+249	YMD	Fm Yemen Dm
+250	YAR	Fm Yemen AR
+251	XXG	Asia NES
+252	XXA	Areas NES
+253	SHN	St. Helena
+254	NULL	Afr.Other NS
+255	XXB	CACM NES
+256	NULL	Br.Antr.Terr
+257	XXJ	Asia West NS
+258	FLK	Falkland Islands
+259	PSE	Palestinian Territory, Occupied
+260	NTZ	Neutral Zone
+261	NULL	EEC NES
+262	NULL	Eur.Other NE
+263	NULL	Oth.Oceania
+264	XXD	LAIA NES
+265	XXC	E Europe NES
+266	NULL	China FTZ
+267	NULL	Carib. NES
+268	NULL	China SC
+269	NULL	Int Org
+270	NULL	Eur. EFTA NS
+271	XXN	Africa N.NES
+272	ATA	Antarctica
+273	BVT	Bouvet Island
+274	IOT	British Indian Ocean Territory
+275	VGB	Virgin Islands, British
+276	NULL	EU25
+277	CXR	Christmas Island
+278	CCK	Cocos (Keeling) Islands
+279	COK	Cook Islands
+280	CSK	Czechoslovakia
+281	NULL	Ethiopia (before Eritrea split away in 1993)
+282	SGS	South Georgia and the South Sandwich Islands
+283	NULL	France (alt)
+284	XXI	Fr. South Antarctic Terr.
+285	HMD	Heard Island and McDonald Islands
+286	VAT	Holy See (Vatican City State)
+287	NULL	Italy (alt)
+288	NULL	Sarawak
+289	NULL	Malaysia, Peninsula
+290	NULL	Sabah
+291	NULL	South America, NES
+292	MTQ	Martinique
+293	NULL	Midway
+294	MSR	Montserrat
+295	NRU	Nauru
+296	XXH	Oceania, NES
+297	NULL	Netherlands Antilles and Aruba
+298	NULL	New Zealand (alt)
+299	XXM	Europe NES
+300	NIU	Niue
+301	NFK	Norfolk Island
+302	XXK	Africa, NES
+303	NULL	Norway (alt)
+304	UMI	United States Minor Outlying Islands
+305	PCI	Fmr Pacific Isds
+306	NULL	East and West Pakistan
+307	NULL	Fmr Panama, excl.Canal Zone
+308	NULL	Fmr Panama-Canal-Zone
+309	PCN	Pitcairn
+310	XXF	North and Central America, nes
+311	REU	Réunion
+312	NULL	Ryukyu Island
+313	NULL	Saint Kitts, Nevis and Anguilla
+314	AIA	Anguilla
+315	NULL	Sikkim
+316	NULL	India (alt)
+317	NULL	So. African Customs Union
+318	NULL	Fmr Rhodesia Nyas
+319	ESH	Western Sahara
+320	SJM	Svalbard and Jan Mayen
+321	NULL	Switzerland (alt)
+322	TKL	Tokelau
+323	NULL	Fmr Tanganyika
+324	NULL	Fmr Zanzibar and Pemba Isd
+325	XXE	Bunkers
+326	XXL	Free Zones
+327	NULL	Secret & Differences
+328	NULL	USA (before 1981)
+329	NULL	United States (alt)
+330	NULL	Fmr Dem. Rep. of Vietnam
+331	NULL	Fmr Rep. of Vietnam
+332	NULL	Wake Island
+333	WLF	Wallis and Futuna
+334	SCG	Serbia and Montenegro
+335	NULL	France, including Monaco, excluding Guadeloupe, Martinique, Reunion and French Guiana
+336	NULL	Italy, including San Marino
+337	PUS	US Misc. Pacific Isds
+338	NULL	NES
+339	SSD	South Sudan
+340	NULL	America NES
+341	NULL	Central America Common Market
+342	NULL	European Free Trade Association EFTA
+343	NULL	Africa NES
+344	ATF	NULL
+345	TMP	NULL
