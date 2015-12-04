@@ -9,6 +9,7 @@ path = os.path.dirname(__file__)
 
 __radius_min = 5
 __radius_max = 10
+__opacity = 1
 
 class VisTkViz(object):
 
@@ -47,6 +48,18 @@ class VisTkViz(object):
     def draw_viz(self, json_data):
         raise NotImplementedError()
 
+    def update(self):
+
+        js = """
+        (function (visualization){
+          visualization.params().var_sort_asc = !visualization.params().var_sort_asc;
+          visualization.params().init = true
+          visualization.params().refresh = true
+          d3.select(visualization.container()).call(visualization);
+        })(window.visualization)
+        """
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
 
 class Treemap(VisTkViz):
 
@@ -82,12 +95,13 @@ class Treemap(VisTkViz):
     def draw_viz(self, json_data):
 
         js = """
-        (function (){
+        window.visualization = null;
+        (function (visualization){
 
           var viz_data = %s;
           var viz_container = '#%s';
 
-          var visualization = vistk.viz()
+          visualization = vistk.viz()
                 .params({
                   type: 'treemap',
                   container: viz_container,
@@ -128,7 +142,7 @@ class Treemap(VisTkViz):
                 });
 
             d3.select(viz_container).call(visualization);
-        })();
+        })(window.visualization);
         """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.size,
                self.name, self.year, self.title)
 
@@ -293,13 +307,14 @@ class Caterplot(VisTkViz):
 
 class Dotplot(VisTkViz):
 
-    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[]):
+    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[], x_domain=[]):
         super(Dotplot, self).__init__()
         self.id = id
         self.x = x
         self.year = year
         self.color = color
         self.selection = selection
+        self.x_domain = x_domain
 
         if group is None:
             self.group = id
@@ -330,6 +345,7 @@ class Dotplot(VisTkViz):
               var_id: '%s',
               var_group: '%s',
               var_x: '%s',
+              x_domain: %s,
               var_y: function() { return this.height/2; },
               var_text: '%s',
               var_color: '%s',
@@ -355,7 +371,7 @@ class Dotplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.x, self.name, self.color,
+        """ % (json_data, self.container_id, self.id, self.group, self.x, self.x_domain, self.name, self.color,
           self.year, self.selection)
 
         html_src = """
@@ -465,48 +481,38 @@ class Geomap(VisTkViz):
           var names = %s;
           var viz_container = '#%s';
 
-          console.log("NAMES", names)
-        //  queue()
-        //      .defer(d3.json, "../geomap/world-110m.json")
-        //      .defer(d3.tsv, "../geomap/world-country-names.tsv")
-        //      .await(ready);
+          var visualization = vistk.viz()
+            .params({
+              dev: true,
+              type: 'geomap',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              topology: world,
+              names: names,
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: 'continent',
+              var_x: 'x',
+              var_y: 'y',
+              var_text: '%s',
+              var_color: '%s',
+              items: [{
+                attr: "name",
+                marks: [{
+                  type: "shape",
+                  fill: d3.scale.linear().domain([0, 1]).range(["red", "green"])
+                }]
+              }],
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
 
-        //  function ready(error, world, names) {
-
-            var visualization = vistk.viz()
-              .params({
-                dev: true,
-                type: 'geomap',
-                width: 800,
-                height: 600,
-                margin: {top: 10, right: 10, bottom: 30, left: 30},
-                topology: world,
-                names: names,
-                container: viz_container,
-                data: viz_data,
-                var_id: '%s',
-                var_group: 'continent',
-                var_x: 'x',
-                var_y: 'y',
-                var_text: '%s',
-                var_color: '%s',
-                items: [{
-                  attr: "name",
-                  marks: [{
-                    type: "shape",
-                    fill: d3.scale.linear().domain([0, 1]).range(["red", "green"])
-                  }]
-                }],
-                time: {
-                  var_time: 'year',
-                  current_time: %s,
-                  parse: function(d) { return d; }
-                }
-              });
-
-            d3.select(viz_container).call(visualization);
-
-        //  }
+          d3.select(viz_container).call(visualization);
 
         })();
         """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.year)
@@ -793,7 +799,7 @@ class Stackedgraph(VisTkViz):
 
           var viz_data = %s;
           var viz_container = '#%s';
-          console.log("DATA", viz_data)
+
           var visualization = vistk.viz()
             .params({
               type: 'stacked',
