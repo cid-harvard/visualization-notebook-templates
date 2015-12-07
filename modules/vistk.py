@@ -16,7 +16,7 @@ class VisTkViz(object):
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'https://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -460,11 +460,13 @@ class Geomap(VisTkViz):
         for row in f_tsv:
           WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
-    def __init__(self, id="id", color="color", name=None, year=2013):
+    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], color_domain=[0, 1]):
         super(Geomap, self).__init__()
         self.id = id
         self.year = year
         self.color = color
+        self.color_domain = color_domain
+        self.color_range = color_range
 
         if name is None:
             self.name = id
@@ -499,10 +501,9 @@ class Geomap(VisTkViz):
               var_text: '%s',
               var_color: '%s',
               items: [{
-                attr: "name",
                 marks: [{
                   type: "shape",
-                  fill: d3.scale.linear().domain([0, 1]).range(["red", "green"])
+                  fill: d3.scale.linear().domain(%s).range(%s)
                 }]
               }],
               time: {
@@ -515,7 +516,7 @@ class Geomap(VisTkViz):
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.year)
+        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.color_domain, self.color_range, self.year)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
