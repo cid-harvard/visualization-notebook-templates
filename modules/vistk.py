@@ -226,6 +226,7 @@ class TreemapColor(VisTkViz):
                       height: function(d) { return d.dy; }
                     }, {
                       var_mark: '__highlighted',
+                      filter: function(d) { return d.depth === 2; },
                       type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
                       translate: [10, 10]
                     }]
