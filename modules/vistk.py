@@ -117,7 +117,7 @@ class Treemap(VisTkViz):
                   var_text: '%s',
                   items: [{
                     marks: [{
-                      type: "div",
+                      type: "text",
                       filter: function(d) { return d.depth == 1 && d.dx > 30 && d.dy > 30; },
                       translate: [5, 0]
                     }, {
@@ -144,6 +144,102 @@ class Treemap(VisTkViz):
             d3.select(viz_container).call(visualization);
         })(window.visualization);
         """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.size,
+               self.name, self.year, self.title)
+
+        html_src = """
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class TreemapColor(VisTkViz):
+
+    def __init__(self, id='id', group='group', name=None, color=None, size=None, year=1995, filter=None, sort=None, title='',  color_range=['red', 'green'], color_domain=[0, 1]):
+        super(TreemapColor, self).__init__()
+
+        self.id = id
+        self.group = group
+        self.year = year
+        self.sort = sort
+        self.title = title
+        self.color_range = color_range
+        self.color_domain = color_domain
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+        if size is None:
+            self.size = id
+        else:
+            self.size = size
+
+        if filter is None:
+            self.filter = '[]'
+        else:
+            self.filter = filter
+
+    def draw_viz(self, json_data):
+
+        js = """
+        window.visualization = null;
+        (function (visualization){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          //d3.select(viz_container).style('position', 'absolute');
+
+          visualization = vistk.viz()
+                .params({
+                  type: 'treemap',
+                  container: viz_container,
+                  height: 600,
+                  width: 900,
+                  margin: {top: 20, right: 10, bottom: 10, left: 10},
+                  data: viz_data,
+                  var_id: '%s',
+                  var_sort: '%s',
+                  var_group: '%s',
+                  var_color: '%s',
+                  color: d3.scale.linear().domain(%s).range(%s),
+                  var_size: '%s',
+                  var_text: '%s',
+                  items: [{
+                    marks: [{
+                      type: "text",
+                      filter: function(d) { return d.depth === 1 && d.dx > 30 && d.dy > 30; },
+                      translate: [5, 0]
+                    }, {
+                      type: "rect",
+                      filter: function(d, i) { return d.depth == 2; },
+                      x: 0,
+                      y: 0,
+                      width: function(d) { return d.dx; },
+                      height: function(d) { return d.dy; }
+                    }, {
+                      var_mark: '__highlighted',
+                      type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                      translate: [10, 10]
+                    }]
+                  }],
+                  time: {
+                    var_time: 'year',
+                    current_time: %s
+                  },
+                  title: '%s'
+                });
+
+            d3.select(viz_container).call(visualization);
+        })(window.visualization);
+        """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.color_domain, self.color_range, self.size,
                self.name, self.year, self.title)
 
         html_src = """
