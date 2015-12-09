@@ -211,11 +211,11 @@ class Scatterplot(VisTkViz):
                 }, {
                   var_mark: '__selected',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  rotate: "0"
+                  translate: [10, 10]
                 }, {
                   var_mark: '__highlighted',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  rotate: "0"
+                  translate: [10, 10]
                 }]
               }],
               time: {
