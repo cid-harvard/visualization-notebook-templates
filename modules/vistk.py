@@ -9,13 +9,14 @@ path = os.path.dirname(__file__)
 
 __radius_min = 5
 __radius_max = 10
+__opacity = 1
 
 class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'https://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -47,6 +48,18 @@ class VisTkViz(object):
     def draw_viz(self, json_data):
         raise NotImplementedError()
 
+    def update(self):
+
+        js = """
+        (function (visualization){
+          visualization.params().var_sort_asc = !visualization.params().var_sort_asc;
+          visualization.params().init = true
+          visualization.params().refresh = true
+          d3.select(visualization.container()).call(visualization);
+        })(window.visualization)
+        """
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
 
 class Treemap(VisTkViz):
 
@@ -82,12 +95,13 @@ class Treemap(VisTkViz):
     def draw_viz(self, json_data):
 
         js = """
-        (function (){
+        window.visualization = null;
+        (function (visualization){
 
           var viz_data = %s;
           var viz_container = '#%s';
 
-          var visualization = vistk.viz()
+          visualization = vistk.viz()
                 .params({
                   type: 'treemap',
                   container: viz_container,
@@ -103,7 +117,7 @@ class Treemap(VisTkViz):
                   var_text: '%s',
                   items: [{
                     marks: [{
-                      type: "div",
+                      type: "text",
                       filter: function(d) { return d.depth == 1 && d.dx > 30 && d.dy > 30; },
                       translate: [5, 0]
                     }, {
@@ -128,8 +142,105 @@ class Treemap(VisTkViz):
                 });
 
             d3.select(viz_container).call(visualization);
-        })();
+        })(window.visualization);
         """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.size,
+               self.name, self.year, self.title)
+
+        html_src = """
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class TreemapColor(VisTkViz):
+
+    def __init__(self, id='id', group='group', name=None, color=None, size=None, year=1995, filter=None, sort=None, title='',  color_range=['red', 'green'], color_domain=[0, 1]):
+        super(TreemapColor, self).__init__()
+
+        self.id = id
+        self.group = group
+        self.year = year
+        self.sort = sort
+        self.title = title
+        self.color_range = color_range
+        self.color_domain = color_domain
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+        if size is None:
+            self.size = id
+        else:
+            self.size = size
+
+        if filter is None:
+            self.filter = '[]'
+        else:
+            self.filter = filter
+
+    def draw_viz(self, json_data):
+
+        js = """
+        window.visualization = null;
+        (function (visualization){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          //d3.select(viz_container).style('position', 'absolute');
+
+          visualization = vistk.viz()
+                .params({
+                  type: 'treemap',
+                  container: viz_container,
+                  height: 600,
+                  width: 900,
+                  margin: {top: 20, right: 10, bottom: 10, left: 10},
+                  data: viz_data,
+                  var_id: '%s',
+                  var_sort: '%s',
+                  var_group: '%s',
+                  var_color: '%s',
+                  color: d3.scale.linear().domain(%s).range(%s),
+                  var_size: '%s',
+                  var_text: '%s',
+                  items: [{
+                    marks: [{
+                      type: "text",
+                      filter: function(d) { return d.depth === 1 && d.dx > 30 && d.dy > 30; },
+                      translate: [5, 0]
+                    }, {
+                      type: "rect",
+                      filter: function(d, i) { return d.depth == 2; },
+                      x: 0,
+                      y: 0,
+                      width: function(d) { return d.dx; },
+                      height: function(d) { return d.dy; }
+                    }, {
+                      var_mark: '__highlighted',
+                      filter: function(d) { return d.depth === 2; },
+                      type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
+                      translate: [10, 10]
+                    }]
+                  }],
+                  time: {
+                    var_time: 'year',
+                    current_time: %s
+                  },
+                  title: '%s'
+                });
+
+            d3.select(viz_container).call(visualization);
+        })(window.visualization);
+        """ % (json_data, self.container_id, self.id, self.sort, self.group, self.color, self.color_domain, self.color_range, self.size,
                self.name, self.year, self.title)
 
         html_src = """
@@ -197,11 +308,11 @@ class Scatterplot(VisTkViz):
                 }, {
                   var_mark: '__selected',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  rotate: "0"
+                  translate: [10, 10]
                 }, {
                   var_mark: '__highlighted',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  rotate: "0"
+                  translate: [10, 10]
                 }]
               }],
               time: {
@@ -293,13 +404,14 @@ class Caterplot(VisTkViz):
 
 class Dotplot(VisTkViz):
 
-    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[]):
+    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[], x_domain=[]):
         super(Dotplot, self).__init__()
         self.id = id
         self.x = x
         self.year = year
         self.color = color
         self.selection = selection
+        self.x_domain = x_domain
 
         if group is None:
             self.group = id
@@ -330,6 +442,7 @@ class Dotplot(VisTkViz):
               var_id: '%s',
               var_group: '%s',
               var_x: '%s',
+              x_domain: %s,
               var_y: function() { return this.height/2; },
               var_text: '%s',
               var_color: '%s',
@@ -355,7 +468,7 @@ class Dotplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.x, self.name, self.color,
+        """ % (json_data, self.container_id, self.id, self.group, self.x, self.x_domain, self.name, self.color,
           self.year, self.selection)
 
         html_src = """
@@ -444,11 +557,13 @@ class Geomap(VisTkViz):
         for row in f_tsv:
           WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
-    def __init__(self, id="id", color="color", name=None, year=2013):
+    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], color_domain=[0, 1]):
         super(Geomap, self).__init__()
         self.id = id
         self.year = year
         self.color = color
+        self.color_domain = color_domain
+        self.color_range = color_range
 
         if name is None:
             self.name = id
@@ -465,51 +580,40 @@ class Geomap(VisTkViz):
           var names = %s;
           var viz_container = '#%s';
 
-          console.log("NAMES", names)
-        //  queue()
-        //      .defer(d3.json, "../geomap/world-110m.json")
-        //      .defer(d3.tsv, "../geomap/world-country-names.tsv")
-        //      .await(ready);
+          var visualization = vistk.viz()
+            .params({
+              dev: true,
+              type: 'geomap',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              topology: world,
+              names: names,
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: 'continent',
+              var_x: 'x',
+              var_y: 'y',
+              var_text: '%s',
+              var_color: '%s',
+              items: [{
+                marks: [{
+                  type: "shape",
+                  fill: d3.scale.linear().domain(%s).range(%s)
+                }]
+              }],
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
 
-        //  function ready(error, world, names) {
-
-            var visualization = vistk.viz()
-              .params({
-                dev: true,
-                type: 'geomap',
-                width: 800,
-                height: 600,
-                margin: {top: 10, right: 10, bottom: 30, left: 30},
-                topology: world,
-                names: names,
-                container: viz_container,
-                data: viz_data,
-                var_id: '%s',
-                var_group: 'continent',
-                var_x: 'x',
-                var_y: 'y',
-                var_text: '%s',
-                var_color: '%s',
-                items: [{
-                  attr: "name",
-                  marks: [{
-                    type: "shape",
-                    fill: d3.scale.linear().domain([0, 1]).range(["red", "green"])
-                  }]
-                }],
-                time: {
-                  var_time: 'year',
-                  current_time: %s,
-                  parse: function(d) { return d; }
-                }
-              });
-
-            d3.select(viz_container).call(visualization);
-
-        //  }
+          d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.year)
+        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.color_domain, self.color_range, self.year)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
@@ -793,7 +897,7 @@ class Stackedgraph(VisTkViz):
 
           var viz_data = %s;
           var viz_container = '#%s';
-          console.log("DATA", viz_data)
+
           var visualization = vistk.viz()
             .params({
               type: 'stacked',
