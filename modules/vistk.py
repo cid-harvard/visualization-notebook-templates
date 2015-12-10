@@ -455,6 +455,10 @@ class Dotplot(VisTkViz):
                   var_mark: '__highlighted',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
                   translate: [0, -20]
+                }, {
+                  var_mark: '__selected',
+                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                  translate: [0, -20]
                 }]
               }],
               time: {
