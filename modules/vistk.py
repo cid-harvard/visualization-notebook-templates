@@ -561,13 +561,14 @@ class Geomap(VisTkViz):
         for row in f_tsv:
           WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
-    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], color_domain=[0, 1]):
+    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], color_domain=[0, 1], title=''):
         super(Geomap, self).__init__()
         self.id = id
         self.year = year
         self.color = color
         self.color_domain = color_domain
         self.color_range = color_range
+        self.title = title
 
         if name is None:
             self.name = id
@@ -611,13 +612,14 @@ class Geomap(VisTkViz):
                 var_time: 'year',
                 current_time: %s,
                 parse: function(d) { return d; }
-              }
+              },
+              title: '%s'
             });
 
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.color_domain, self.color_range, self.year)
+        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.color_domain, self.color_range, self.year, self.title)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
