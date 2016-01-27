@@ -22,7 +22,7 @@ id	name
 56	Belgium
 60	Bermuda
 64	Bhutan
-68	Bolivia, Plurinational State of
+68	Bolivia
 70	Bosnia and Herzegovina
 72	Botswana
 74	Bouvet Island
@@ -52,8 +52,8 @@ id	name
 170	Colombia
 174	Comoros
 175	Mayotte
-178	Congo
-180	Congo, the Democratic Republic of the
+178	Republic of the Congo
+180	DR Congo
 184	Cook Islands
 188	Costa Rica
 191	Croatia
@@ -106,22 +106,22 @@ id	name
 352	Iceland
 356	India
 360	Indonesia
-364	Iran, Islamic Republic of
+364	Iran
 368	Iraq
 372	Ireland
 376	Israel
 380	Italy
-384	Côte d'Ivoire
+384	Ivory Coast
 388	Jamaica
 392	Japan
 398	Kazakhstan
 400	Jordan
 404	Kenya
 408	Korea, Democratic People's Republic of
-410	Korea, Republic of
+410	South Korea
 414	Kuwait
 417	Kyrgyzstan
-418	Lao People's Democratic Republic
+418	Laos
 422	Lebanon
 426	Lesotho
 428	Latvia
@@ -143,7 +143,7 @@ id	name
 484	Mexico
 492	Monaco
 496	Mongolia
-498	Moldova, Republic of
+498	Moldova
 499	Montenegro
 500	Montserrat
 504	Morocco
@@ -186,7 +186,7 @@ id	name
 634	Qatar
 638	Réunion
 642	Romania
-643	Russian Federation
+643	Russia
 646	Rwanda
 652	Saint Barthélemy
 654	Saint Helena, Ascension and Tristan da Cunha
@@ -205,7 +205,7 @@ id	name
 694	Sierra Leone
 702	Singapore
 703	Slovakia
-704	Viet Nam
+704	Vietnam
 705	Slovenia
 706	Somalia
 710	South Africa
@@ -234,19 +234,19 @@ id	name
 798	Tuvalu
 800	Uganda
 804	Ukraine
-807	Macedonia, the former Yugoslav Republic of
+807	Macedonia
 818	Egypt
 826	United Kingdom
 831	Guernsey
 832	Jersey
 833	Isle of Man
-834	Tanzania, United Republic of
+834	Tanzania
 840	United States
 850	Virgin Islands, U.S.
 854	Burkina Faso
 858	Uruguay
 860	Uzbekistan
-862	Venezuela, Bolivarian Republic of
+862	Venezuela
 876	Wallis and Futuna
 882	Samoa
 887	Yemen
