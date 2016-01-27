@@ -16,7 +16,8 @@ class VisTkViz(object):
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               # 'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -556,17 +557,17 @@ class Geomap(VisTkViz):
     WORLD_JSON = open(os.path.join(path, "../sourcedata/geomap/world-110m.json")).read()
 
     WORLD_NAME = []
+    # https://raw.githubusercontent.com/cid-harvard/vis-toolkit-datasets/gh-pages/data/world-country-names.tsv
     with open(os.path.join(path, "../sourcedata/geomap/world-country-names.tsv")) as f:
         f_tsv = csv.reader(f, delimiter='\t')
         for row in f_tsv:
           WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
-    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], color_domain=[0, 1], title=''):
+    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], title=''):
         super(Geomap, self).__init__()
         self.id = id
         self.year = year
         self.color = color
-        self.color_domain = color_domain
         self.color_range = color_range
         self.title = title
 
@@ -585,6 +586,11 @@ class Geomap(VisTkViz):
           var names = %s;
           var viz_container = '#%s';
 
+          var var_color = '%s';
+          var color_domain = vistk.utils.extent(viz_data, var_color);
+
+          var color_scale = d3.scale.linear().domain(color_domain).range(%s);
+
           var visualization = vistk.viz()
             .params({
               dev: true,
@@ -601,12 +607,18 @@ class Geomap(VisTkViz):
               var_x: 'x',
               var_y: 'y',
               var_text: '%s',
-              var_color: '%s',
+              var_color: var_color,
               items: [{
                 marks: [{
                   type: "shape",
-                  fill: d3.scale.linear().domain(%s).range(%s)
-                }]
+                  fill: function(d) {
+                    if(typeof d === 'undefined') {
+                      return 'lightgray';
+                    } else {
+                      return color_scale(d);
+                    }
+                  }
+                }],
               }],
               time: {
                 var_time: 'year',
@@ -614,12 +626,12 @@ class Geomap(VisTkViz):
                 parse: function(d) { return d; }
               },
               title: '%s'
-            });
+            })
 
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.id, self.name, self.color, self.color_domain, self.color_range, self.year, self.title)
+        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.color, self.color_range, self.id, self.name, self.year, self.title)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
