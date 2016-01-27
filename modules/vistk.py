@@ -16,8 +16,8 @@ class VisTkViz(object):
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                #'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               # 'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
-               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
+               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               #'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
