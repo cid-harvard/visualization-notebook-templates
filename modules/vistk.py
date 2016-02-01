@@ -40,6 +40,7 @@ class VisTkViz(object):
 
     def draw(self, data):
         self.container_id = self.create_container()
+        self.legend_id = self.create_container()
         data = self.preprocess_data(data)
         json_data = self.handle_data(data)
         self.draw_viz(json_data)
@@ -591,8 +592,8 @@ class Geomap(VisTkViz):
             .params({
               dev: true,
               type: 'geomap',
-              width: 800,
-              height: 600,
+              width: 700,
+              height: 400,
               margin: {top: 10, right: 10, bottom: 30, left: 30},
               topology: world,
               names: names,
@@ -626,8 +627,60 @@ class Geomap(VisTkViz):
 
           d3.select(viz_container).call(visualization);
 
+          var width = 500
+//          var format = d3.format(".1f");
+          var format = d3.format(".2s");
+          var viz_legend = '#%s';
+
+          var colors = d3.range(5).map(function(d, i) {
+            return (d + 1) * (color_domain[1] - color_domain[0])/5;
+          });
+
+          var legend = vistk.viz()
+                .params({
+                  dev: true,
+                  height: 60,
+                  width: 700,
+                  margin: {top: 0, right: 100, bottom: 0, left: 50},
+                  type: 'ordinal_horizontal',
+                  data: colors,
+                  container: viz_legend,
+                  var_text: '__value',
+                  var_color: '__value',
+                  var_group: '__value',
+                  var_x: '__id',
+                  var_y: '__id',
+                  x_ticks: 10,
+                  items: [{
+                    marks: [{
+                      type: "rect",
+                      rotate: "0",
+                      width: width/colors.length,
+                      height: 20,
+                      fill: function(d) {
+                        if(typeof d === 'undefined') {
+                          return 'lightgray';
+                        } else {
+                          return color_scale(d.__value);
+                        }
+                      }
+                    }, {
+                      type: "text",
+                      translate: [width/colors.length/2, 25],
+                      text_anchor: 'middle',
+                      text: function(d, i) {
+                        return format(d['__value']).replace('G', 'B');
+                      }
+                    }]
+                  }]
+                });
+
+            d3.select(viz_legend).call(legend);
+
         })();
-        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id, self.color, self.color_range, self.id, self.name, self.year, self.title)
+        """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id,
+          self.color, self.color_range, self.id, self.name, self.year, self.title,
+          self.legend_id)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
