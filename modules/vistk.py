@@ -15,8 +15,7 @@ class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
-               # 'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -335,7 +334,7 @@ class Scatterplot(VisTkViz):
 
 class PieScatterplot(VisTkViz):
 
-    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013, share=None):
         super(PieScatterplot, self).__init__()
         self.id = id
         self.x = x
@@ -357,6 +356,11 @@ class PieScatterplot(VisTkViz):
             self.color = id
         else:
             self.color = color
+
+        if share is None:
+            self.share = self.r
+        else:
+            self.share = share
 
     def draw_viz(self, json_data):
 
@@ -384,12 +388,12 @@ class PieScatterplot(VisTkViz):
               var_y: '%s',
               var_r: '%s',
               var_text: '%s',
-              var_share: 'value',
+              var_share: '%s',
               items: [{
                 marks: [{
                   var_mark: '__aggregated',
                   type: d3.scale.ordinal().domain([true, false]).range(["piechart", "none"]),
-                  var_share: 'value',
+                  var_share: '%s',
                   class: 'piechart'
                 }]
               }],
@@ -406,7 +410,7 @@ class PieScatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.share, self.share, self.year)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
