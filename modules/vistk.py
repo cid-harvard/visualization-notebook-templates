@@ -15,7 +15,8 @@ class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
+               # 'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -313,6 +314,88 @@ class Scatterplot(VisTkViz):
                   translate: [10, 10]
                 }]
               }],
+              time: {
+                var_time: 'year',
+                current_time: %s,
+                parse: function(d) { return d; }
+              }
+            });
+
+        d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.year)
+
+        html_src = """
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class PieScatterplot(VisTkViz):
+
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
+        super(PieScatterplot, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.r = r
+        self.year = year
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'scatterplot',
+              width: 800,
+              height: 600,
+              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              color: function(d) { return d; },
+              var_color: '%s',
+              radius_min: %s,
+              radius_max: %s,
+              var_x: '%s',
+              var_y: '%s',
+              var_r: '%s',
+              var_text: '%s',
+              var_share: 'value',
+              items: [{
+                marks: [{
+                  var_mark: '__aggregated',
+                  type: d3.scale.ordinal().domain([true, false]).range(["piechart", "none"]),
+                  var_share: 'value',
+                  class: 'piechart'
+                }]
+              }],
+              set: {
+                __aggregated: true
+              },
               time: {
                 var_time: 'year',
                 current_time: %s,
