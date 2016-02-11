@@ -390,8 +390,8 @@ class PieScatterplot(VisTkViz):
               var_r: '%s',
               var_text: '%s',
               var_share: '%s',
-              radius_min: 50,
-              radius_max: 50,
+              radius_min: 20,
+              radius_max: 20,
               items: [{
                 marks: [{
                   var_mark: '__aggregated',
@@ -973,7 +973,7 @@ class Productspace(VisTkViz):
 
           var visualization = vistk.viz()
             .params({
-              type: 'scatterplot',
+              type: 'productspace',
               width: 800,
               height: 600,
               margin: {top: 10, right: 10, bottom: 30, left: 30},
