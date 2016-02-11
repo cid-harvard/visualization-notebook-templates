@@ -15,7 +15,8 @@ class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
+               #'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -380,8 +381,8 @@ class PieScatterplot(VisTkViz):
               data: viz_data,
               var_id: '%s',
               var_group: '%s',
-              color: function(d) { return d; },
-              var_color: '%s',
+              color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
+              var_color: 'cutoff',
               radius_min: %s,
               radius_max: %s,
               var_x: '%s',
@@ -389,12 +390,17 @@ class PieScatterplot(VisTkViz):
               var_r: '%s',
               var_text: '%s',
               var_share: '%s',
+              radius_min: 50,
+              radius_max: 50,
               items: [{
                 marks: [{
                   var_mark: '__aggregated',
                   type: d3.scale.ordinal().domain([true, false]).range(["piechart", "none"]),
-                  var_share: '%s',
+                  var_share: 'value',
                   class: 'piechart'
+                }, {
+                  var_mark: '__aggregated',
+                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"])
                 }]
               }],
               set: {
@@ -410,7 +416,7 @@ class PieScatterplot(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.share, self.share, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, 5, 10, self.x, self.y, self.r, self.name, self.share, self.year)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
