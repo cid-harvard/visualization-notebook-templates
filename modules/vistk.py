@@ -575,11 +575,12 @@ class Dotplot(VisTkViz):
 
 class Sparkline(VisTkViz):
 
-    def __init__(self, x="year", y="y", id="id", color="color", group=None, name=None, year=2013):
+    def __init__(self, x="year", y="y", mark="diamond", id="id", color="color", group=None, name=None, year=2013):
         super(Sparkline, self).__init__()
         self.id = id
         self.x = x
         self.y = y
+        self.mark = mark
         self.year = year
         self.color = color
         self.group = group
@@ -602,19 +603,18 @@ class Sparkline(VisTkViz):
               type: 'sparkline',
               width: 800,
               height: 100,
-              margin: {top: 10, right: 10, bottom: 30, left: 30},
+              margin: {top: 10, right: 100, bottom: 30, left: 30},
               container: viz_container,
               data: viz_data,
               var_id: '%s',
               var_group: '%s',
-              var_x: 'year',
+              var_x: '%s',
               var_y: '%s',
               var_text: '%s',
               var_color: '%s',
               items: [{
-                attr: "name",
                 marks: [{
-                  type: "diamond",
+                  type: '%s',
                   width: 10,
                   height: 10
                 }, {
@@ -633,7 +633,7 @@ class Sparkline(VisTkViz):
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.y, self.name, self.color, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.x, self.y, self.name, self.color, self.mark, self.year)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
