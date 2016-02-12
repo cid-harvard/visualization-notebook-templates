@@ -389,13 +389,17 @@ class PieScatterplot(VisTkViz):
               var_r: '%s',
               var_text: '%s',
               var_share: '%s',
-              radius_min: 20,
-              radius_max: 20,
+              radius_min: 10,
+              radius_max: 50,
               items: [{
                 marks: [{
                   var_mark: '__aggregated',
+                  type: d3.scale.ordinal().domain([true, false]).range(["circle", "none"]),
+                  fill: "white"
+                }, {
+                  var_mark: '__aggregated',
                   type: d3.scale.ordinal().domain([true, false]).range(["piechart", "none"]),
-                  var_share: 'value',
+                  var_share: 'nb_products',
                   class: 'piechart'
                 }, {
                   var_mark: '__aggregated',
