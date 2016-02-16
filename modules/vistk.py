@@ -301,8 +301,7 @@ class Scatterplot(VisTkViz):
               var_text: '%s',
               items: [{
                 marks: [{
-                  type: "circle",
-        //          fill: function(d) { return vars.color(vars.accessor_items(d)[vars.var_color]); }
+                  type: 'circle'
                 }, {
                   var_mark: '__selected',
                   type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
@@ -723,8 +722,7 @@ class Geomap(VisTkViz):
 
           d3.select(viz_container).call(visualization);
 
-          var width = 500
-//          var format = d3.format(".1f");
+          var width = 500;
           var format = d3.format(".2s");
           var viz_legend = '#%s';
 
@@ -838,7 +836,7 @@ class Linechart(VisTkViz):
               }],
               color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
               time: {
-                parse: d3.time.format('%%Y').parse,
+                parse: function(d) { return d; },
                 var_time: 'year',
                 current_time: vistk.utils.max
               },
