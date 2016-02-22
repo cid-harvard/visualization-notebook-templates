@@ -333,13 +333,15 @@ class Scatterplot(VisTkViz):
 
 class PieScatterplot(VisTkViz):
 
-    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013, share=None):
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013, var_time='year', share=None, title=''):
         super(PieScatterplot, self).__init__()
         self.id = id
         self.x = x
         self.y = y
         self.r = r
         self.year = year
+        self.var_time = var_time
+        self.title = title
 
         if name is None:
             self.name = id
@@ -409,16 +411,17 @@ class PieScatterplot(VisTkViz):
                 __aggregated: true
               },
               time: {
-                var_time: 'year',
+                var_time: '%s',
                 current_time: %s,
                 parse: function(d) { return d; }
-              }
+              },
+              title: '%s'
             });
 
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, 5, 10, self.x, self.y, self.r, self.name, self.share, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, 5, 10, self.x, self.y, self.r, self.name, self.share, self.var_time, self.year, self.title)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
