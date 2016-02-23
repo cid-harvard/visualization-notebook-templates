@@ -500,7 +500,7 @@ class Caterplot(VisTkViz):
 
 class Dotplot(VisTkViz):
 
-    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[], x_domain=[]):
+    def __init__(self, x="x", id="id", color="color", name=None, group=None, year=2013, selection=[], x_domain=[], title=''):
         super(Dotplot, self).__init__()
         self.id = id
         self.x = x
@@ -508,6 +508,7 @@ class Dotplot(VisTkViz):
         self.color = color
         self.selection = selection
         self.x_domain = x_domain
+        self.title = title
 
         if group is None:
             self.group = id
@@ -563,13 +564,14 @@ class Dotplot(VisTkViz):
                 parse: function(d) { return d; }
               },
               selection: %s,
+              title: '%s'
             });
 
         d3.select(viz_container).call(visualization);
 
         })();
         """ % (json_data, self.container_id, self.id, self.group, self.x, self.x_domain, self.name, self.color,
-          self.year, self.selection)
+          self.year, self.selection, self.title)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
