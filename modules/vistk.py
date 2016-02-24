@@ -701,6 +701,7 @@ class Geomap(VisTkViz):
               container: viz_container,
               data: viz_data,
               var_id: '%s',
+              var_names: '%s',
               var_group: '%s',
               var_x: 'x',
               var_y: 'y',
@@ -709,11 +710,12 @@ class Geomap(VisTkViz):
               items: [{
                 marks: [{
                   type: "shape",
-                  fill: function(d) {
+                  fill: function(d, i, vars) {
+
                     if(typeof d === 'undefined') {
                       return 'lightgray';
                     } else {
-                      return color_scale(d);
+                      return color_scale(d.data[vars.var_color]);
                     }
                   }
                 }],
@@ -779,7 +781,7 @@ class Geomap(VisTkViz):
 
         })();
         """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id,
-          self.color, self.color_range, self.id, self.group, self.name, self.year, self.title,
+          self.color, self.color_range, self.id, self.id, self.group, self.name, self.year, self.title,
           self.legend_id)
 
         html_src = """
