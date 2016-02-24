@@ -660,13 +660,14 @@ class Geomap(VisTkViz):
         for row in f_tsv:
           WORLD_NAME.append({'id': row[0], 'name': row[1]})
 
-    def __init__(self, id="id", color="color", name=None, year=2013, color_range=["red", "green"], title=''):
+    def __init__(self, id="id", color="color", group='continent', name=None, year=2013, color_range=["red", "green"], title=''):
         super(Geomap, self).__init__()
         self.id = id
         self.year = year
         self.color = color
         self.color_range = color_range
         self.title = title
+        self.group = group
 
         if name is None:
             self.name = id
@@ -700,7 +701,7 @@ class Geomap(VisTkViz):
               container: viz_container,
               data: viz_data,
               var_id: '%s',
-              var_group: 'continent',
+              var_group: '%s',
               var_x: 'x',
               var_y: 'y',
               var_text: '%s',
@@ -778,7 +779,7 @@ class Geomap(VisTkViz):
 
         })();
         """ % (json_data, self.WORLD_JSON, self.WORLD_NAME, self.container_id,
-          self.color, self.color_range, self.id, self.name, self.year, self.title,
+          self.color, self.color_range, self.id, self.group, self.name, self.year, self.title,
           self.legend_id)
 
         html_src = """
@@ -790,7 +791,7 @@ class Geomap(VisTkViz):
 
 class Linechart(VisTkViz):
 
-    def __init__(self, x="year", y="y", id="id", name=None, color=None, group=None, selection=[]):
+    def __init__(self, x="year", y="y", id="id", y_invert=True, name=None, color=None, group=None, selection=[]):
         super(Linechart, self).__init__()
         self.id = id
         self.x = x
@@ -807,6 +808,11 @@ class Linechart(VisTkViz):
             self.color = id
         else:
             self.color = color
+
+        if y_invert is True:
+            self.y_invert = 'true'
+        else:
+            self.y_invert = 'false'
 
     def draw_viz(self, json_data):
 
@@ -830,7 +836,7 @@ class Linechart(VisTkViz):
               var_x: '%s',
               var_y: '%s',
               var_text: '%s',
-              y_invert: true,
+              y_invert: %s,
               marks: [{
                 type: 'circle',
                 fill: function(d, i, vars) { return d['color']; }
@@ -851,7 +857,7 @@ class Linechart(VisTkViz):
           d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.selection)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.name, self.y_invert, self.selection)
 
         html_src = """
           <link href='http://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
