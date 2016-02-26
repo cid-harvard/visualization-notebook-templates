@@ -331,7 +331,7 @@ class Scatterplot(VisTkViz):
                 return 'none';
               },
               func: function(d, i, vars) {
-              console.log("FUNCCC", d, i, vars)
+
                 return d3.svg.line()
                    .interpolate(vars.interpolate)
                    .x(function(d) {
@@ -418,8 +418,6 @@ class PieScatterplot(VisTkViz):
               var_r: '%s',
               var_text: '%s',
               var_share: '%s',
-              radius_min: 10,
-              radius_max: 50,
               items: [{
                 marks: [{
                   var_mark: '__aggregated',
@@ -494,6 +492,74 @@ class Caterplot(VisTkViz):
           var visualization = vistk.viz()
             .params({
               type: 'caterplot',
+              width: 800,
+              height: 600,
+              margin: {top: 30, right: 30, bottom: 30, left: 30},
+              container: viz_container,
+              data: viz_data,
+              var_id: '%s',
+              var_group: '%s',
+              var_color: '%s',
+              radius_min: 5,
+              radius_max: 20,
+              var_x: '%s',
+              var_y: '%s',
+              var_r: '%s',
+              var_text: 'name',
+              time: {
+                var_time: 'year',
+                current_time: %s
+              }
+            });
+
+        d3.select(viz_container).call(visualization);
+
+        })();
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
+
+        html_src = """
+          <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
+        """
+        display(HTML(data=html_src))
+
+        display(Javascript(lib=self.JS_LIBS, data=js))
+
+class CaterplotTime(VisTkViz):
+
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
+        super(CaterplotTime, self).__init__()
+        self.id = id
+        self.x = x
+        self.y = y
+        self.r = r
+        self.year = year
+
+        if name is None:
+            self.name = id
+        else:
+            self.name = name
+
+        if group is None:
+            self.group = id
+        else:
+            self.group = group
+
+        if color is None:
+            self.color = id
+        else:
+            self.color = color
+
+    def draw_viz(self, json_data):
+
+        js = """
+        (function (){
+
+          var viz_data = %s;
+          var viz_container = '#%s';
+
+          var visualization = vistk.viz()
+            .params({
+              type: 'caterplot_time',
               width: 800,
               height: 600,
               margin: {top: 30, right: 30, bottom: 30, left: 30},
