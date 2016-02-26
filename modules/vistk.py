@@ -15,7 +15,8 @@ class VisTkViz(object):
 
     JS_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js',
                'http://cid-harvard.github.io/vis-toolkit/js/topojson.js',
-               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
+               'http://127.0.0.1/rv/Dev/vis-toolkit/build/vistk.js']
+#               'http://cid-harvard.github.io/vis-toolkit/build/vistk.js']
 
     def create_container(self):
         container_id = "vistk_div_{id}".format(id=random.randint(0, 100000))
@@ -281,45 +282,72 @@ class Scatterplot(VisTkViz):
           var viz_data = %s;
           var viz_container = '#%s';
 
-          var visualization = vistk.viz()
-            .params({
-              type: 'scatterplot',
-              width: 800,
-              height: 600,
-              margin: {top: 10, right: 10, bottom: 30, left: 30},
-              container: viz_container,
-              data: viz_data,
-              var_id: '%s',
-              var_group: '%s',
-              color: function(d) { return d; },
-              var_color: '%s',
-              radius_min: %s,
-              radius_max: %s,
-              var_x: '%s',
-              var_y: '%s',
-              var_r: '%s',
-              var_text: '%s',
-              items: [{
-                marks: [{
-                  type: 'circle'
-                }, {
-                  var_mark: '__selected',
-                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  translate: [10, 10]
-                }, {
-                  var_mark: '__highlighted',
-                  type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
-                  translate: [10, 10]
-                }]
-              }],
-              time: {
-                var_time: 'year',
-                current_time: %s,
-                parse: function(d) { return d; }
-              }
-            });
+          var params = {
+                type: 'scatterplot',
+                width: 800,
+                height: 600,
+                margin: {top: 10, right: 10, bottom: 30, left: 30},
+                container: viz_container,
+                data: viz_data,
+                var_id: '%s',
+                var_group: '%s',
+                color: function(d) { return d; },
+                var_color: '%s',
+                radius_min: %s,
+                radius_max: %s,
+                var_x: '%s',
+                var_y: '%s',
+                var_r: '%s',
+                var_text: '%s',
+                items: [{
+                  marks: [{
+                    type: 'circle'
+                  }, {
+                    var_mark: '__selected',
+                    type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                    translate: [10, 10]
+                  }, {
+                    var_mark: '__highlighted',
+                    type: d3.scale.ordinal().domain([true, false]).range(["text", "none"]),
+                    translate: [10, 10]
+                  }]
+                }],
+                time: {
+                  var_time: 'year',
+                  current_time: %s,
+                  parse: function(d) { return d; }
+                }
+              };
 
-        d3.select(viz_container).call(visualization);
+          params.connect = [{
+            marks: [{
+              var_mark: '__highlighted',
+              type: d3.scale.ordinal().domain([true, false]).range(['path', 'none']),
+              stroke: function(d, i, vars) {
+                return vars.color(vars.accessor_data(d)[vars.var_color]);
+              },
+              stroke_width: 2,
+              fill: function(d) {
+                return 'none';
+              },
+              func: function(d, i, vars) {
+              console.log("FUNCCC", d, i, vars)
+                return d3.svg.line()
+                   .interpolate(vars.interpolate)
+                   .x(function(d) {
+                     return vars.x_scale[0]['func'](d[vars.var_x]);
+                   })
+                   .y(function(d) {
+                     return vars.y_scale[0]['func'](d[vars.var_y]);
+                   })(d);
+                 }
+            }]
+          }];
+
+          var visualization = vistk.viz()
+            .params(params);
+
+          d3.select(viz_container).call(visualization);
 
         })();
         """ % (json_data, self.container_id, self.id, self.group, self.color, 5, 10, self.x, self.y, self.r, self.name, self.year)
@@ -712,7 +740,7 @@ class Geomap(VisTkViz):
                   type: "shape",
                   fill: function(d, i, vars) {
 
-                    if(typeof d === 'undefined') {
+                    if(typeof d === 'undefined' || d.data.__no_data) {
                       return 'lightgray';
                     } else {
                       return color_scale(d.data[vars.var_color]);
