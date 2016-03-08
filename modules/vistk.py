@@ -458,13 +458,14 @@ class PieScatterplot(VisTkViz):
 
 class Caterplot(VisTkViz):
 
-    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013):
+    def __init__(self, x="x", y="y", id="id", r="r", name=None, color=None, group=None, year=2013, selection=[]):
         super(Caterplot, self).__init__()
         self.id = id
         self.x = x
         self.y = y
         self.r = r
         self.year = year
+        self.selection = selection
 
         if name is None:
             self.name = id
@@ -509,13 +510,14 @@ class Caterplot(VisTkViz):
               time: {
                 var_time: 'year',
                 current_time: %s
-              }
+              },
+              selection: %s
             });
 
         d3.select(viz_container).call(visualization);
 
         })();
-        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year)
+        """ % (json_data, self.container_id, self.id, self.group, self.color, self.x, self.y, self.r, self.year, self.selection)
 
         html_src = """
           <link href='https://cid-harvard.github.io/vis-toolkit/css/vistk.css' rel='stylesheet'>
