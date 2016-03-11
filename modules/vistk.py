@@ -118,10 +118,10 @@ class Treemap(VisTkViz):
                   var_text: '%s',
                   items: [{
                     marks: [{
-                      type: "text",
-                      filter: function(d) { return d.depth == 1 && d.dx > 30 && d.dy > 30; },
-                      translate: [5, 0]
-                    }, {
+                   //   type: "text",
+                   //   filter: function(d) { return d.depth == 1 && d.dx > 30 && d.dy > 30; },
+                   //   translate: [5, 0]
+                   // }, {
                       type: "rect",
                       filter: function(d, i) { return d.depth == 2; },
                       x: 0,
@@ -943,7 +943,10 @@ class Linechart(VisTkViz):
               }, {
                 var_mark: '__highlighted',
                 type: d3.scale.ordinal().domain([true, false]).range(['text', 'none']),
-                translate: [10, 0]
+                translate: [10, 0],
+                text: function(d, i, vars) {
+                  return vars.accessor;
+                }
               }],
               color: d3.scale.ordinal().domain(["Africa", "Americas", "Asia", "Europe", "Oceania"]).range(["#99237d", "#c72439", "#6bc145", "#88c7ed", "#dd9f98"]),
               time: {
