@@ -135,7 +135,7 @@ class ProductSpace(D3PlusViz):
 
     GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_hs4_codes.json")).read()
 
-    def __init__(self, id='id', name=None, color=None):
+    def __init__(self, id='id', name=None, color=None, size=10):
         super(ProductSpace, self).__init__()
         self.id = id
         if name is None:
@@ -146,6 +146,7 @@ class ProductSpace(D3PlusViz):
             self.color = id
         else:
             self.color = color
+        self.size = size
 
     def preprocess_data(self, data):
         return data.rename(columns={self.id: "id"})
@@ -167,7 +168,7 @@ class ProductSpace(D3PlusViz):
           .type("network")
           .nodes(graph_data.nodes)
           .edges(graph_data.edges)
-          .size(10)
+          .size("%s")
           .active({
             "value": function(d){
               return d.M == 1;
@@ -181,6 +182,6 @@ class ProductSpace(D3PlusViz):
           .draw();
 
         })();
-        """ % (json_data, self.GRAPH_DATA, self.container_id, "id", self.color, self.name)
+        """ % (json_data, self.GRAPH_DATA, self.container_id, self.size, "id", self.color, self.name)
 
         display(Javascript(lib=self.JS_LIBS, data=js))
