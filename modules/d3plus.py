@@ -185,3 +185,7 @@ class ProductSpace(D3PlusViz):
         """ % (json_data, self.GRAPH_DATA, self.container_id, self.size, "id", self.color, self.name)
 
         display(Javascript(lib=self.JS_LIBS, data=js))
+
+
+class SITCProductSpace(ProductSpace):
+    GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_sitc_codes.json")).read()
