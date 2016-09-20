@@ -41,3 +41,17 @@ notebook`.
 
 Then, your browser will pop up a new window with a file browser, and you can
 click into the notebook you like.
+
+# Viewing the notebooks on the web
+Github has some functionality to view the notebooks (but not run them) on the
+web, so you can see what's in them. Unfortunately it's bad at rendering the
+actual visualizations themselves. What you can do is go to
+[nbviewer](http://nbviewer.jupyter.org/) and paste in the url and it should
+work fine.
+
+# Do I need the whole directory?
+No. If you want to use this in another project, you can keep only the bits and
+pieces you need. You need `modules/d3plus2.py` for the python code that
+generates the visualizations. You need the network .json files from the
+`classifications` directory if you're using network visualizations and aren't
+using your own.
