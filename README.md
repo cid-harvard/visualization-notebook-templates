@@ -7,7 +7,7 @@ able to dump them as embeddable html snippets.
 
 You need Python 2.7 or 3.x, latter preferred. If you don't already have it, an
 easy way to get it is to install
-(Anaconda)[https://www.continuum.io/downloads], a premade bundle of python and
+[Anaconda](https://www.continuum.io/downloads), a premade bundle of python and
 a lot of scientific computing packages that installs easily on many platforms.
 
 Plus some python packages:
@@ -19,15 +19,15 @@ Plus some python packages:
   systems we commonly use, like HS. For this, instead of the package name, use
   `git+https://github.com/cid-harvard/classifications.git@v0.0.66#egg=linnaeus`
   when installing with pip. Find out more about this package
-  (here)[https://github.com/cid-harvard/classifications/].
+  [here](https://github.com/cid-harvard/classifications/).
 
 To install these packages you should do `pip install <packagename>` in a
-terminal. For terminal basics, check out (this
-tutorial)[http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything].
+terminal. For terminal basics, check out [this
+tutorial](http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything).
 Replace `pip` with `pip3` if you are using python3. On linux or OSX, if it
 complains about permissions, add `sudo -H` to the beginning of the command.
-Finally, optionally and as an advanced feature, you can also use (Virtual
-Environments)[http://docs.python-guide.org/en/latest/dev/virtualenvs/] if you
+Finally, optionally and as an advanced feature, you can also use [Virtual
+Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if you
 don't want to install packages globally and instead keep packages for each
 project separate.
 
@@ -35,7 +35,7 @@ project separate.
 To make your life easier, you probably want to launch Jupyter from the terminal
 in the directory you clone this repository to. (As a reminder, you can read
 about using the terminal
-(here)[http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything]).
+[here](http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything)).
 After you've used `cd` to get to the directory you want, you just run `jupyter
 notebook`.
 
