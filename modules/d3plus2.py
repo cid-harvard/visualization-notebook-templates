@@ -109,7 +109,7 @@ class D3PlusViz(object):
 
 class Treemap(D3PlusViz):
 
-    def __init__(self, id=['group', 'id'], value="value", name=None, color=None):
+    def __init__(self, id=['group', 'id'], value="value", name=None, color=None, tooltip=[]):
         super(Treemap, self).__init__()
         self.id = id
         if name is None:
@@ -121,6 +121,7 @@ class Treemap(D3PlusViz):
         else:
             self.color = color
         self.value = value
+        self.tooltip=tooltip
 
     def generate_js(self, json_data):
 
@@ -142,6 +143,7 @@ class Treemap(D3PlusViz):
           .id({id})
           .color({color})
           .text({text})
+          .tooltip({tooltip})
           .depth(1)
           .data(viz_data)
           .draw();
@@ -161,7 +163,7 @@ class Treemap(D3PlusViz):
 
 class Scatterplot(D3PlusViz):
 
-    def __init__(self, x="x", y="y", id="id", name=None, color=None, size=10):
+    def __init__(self, x="x", y="y", id="id", name=None, color=None, size=10, tooltip=[]):
         super(Scatterplot, self).__init__()
         self.id = id
         self.x = x
@@ -175,6 +177,7 @@ class Scatterplot(D3PlusViz):
         else:
             self.color = color
         self.size=size
+        self.tooltip=tooltip
 
     def generate_js(self, json_data):
 
@@ -191,6 +194,7 @@ class Scatterplot(D3PlusViz):
           .id({id})
           .color({color})
           .text({text})
+          .tooltip({tooltip})
           .x({x})
           .y({y})
           .depth(1)
@@ -207,6 +211,7 @@ class Scatterplot(D3PlusViz):
             text=format_js_value(self.name),
             x=format_js_value(self.x),
             y=format_js_value(self.y),
+            tooltip=format_js_value(self.tooltip)
         )
 
         return Javascript(lib=self.JS_LIBS, data=js)
@@ -218,7 +223,7 @@ class ProductSpace(D3PlusViz):
     HS_GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_hs4_codes.json")).read()
     SITC_GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_sitc_codes.json")).read()
 
-    def __init__(self, id='id', name=None, color=None, size=10, graph_data=None, presence="M", spotlight=True):
+    def __init__(self, id='id', name=None, color=None, size=10, graph_data=None, presence="M", spotlight=True, tooltip=[]):
         super(ProductSpace, self).__init__()
         self.id = id
         if name is None:
@@ -236,6 +241,7 @@ class ProductSpace(D3PlusViz):
         self.size = size
         self.presence = presence
         self.spotlight = spotlight
+        self.tooltip = tooltip
 
     def preprocess_data(self, data):
         return data
@@ -267,6 +273,7 @@ class ProductSpace(D3PlusViz):
           .id({id})
           .color({color})
           .text({text})
+          .tooltip({tooltip})
           .data(viz_data)
           .draw();
 
@@ -279,7 +286,8 @@ class ProductSpace(D3PlusViz):
                    presence=format_js_value(RawJavascript(self.presence)),
                    spotlight=format_js_value(self.spotlight),
                    color=format_js_value(self.color),
-                   text=format_js_value(self.name)
+                   text=format_js_value(self.name),
+                   tooltip=format_js_value(self.tooltip)
                    )
 
         return Javascript(lib=self.JS_LIBS, data=js)
