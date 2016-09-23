@@ -3,6 +3,8 @@ A set of iPython notebooks that can be used to generate some of the most common
 atlas-style interactive visualizations with any old dataset, and also to be
 able to dump them as embeddable html snippets.
 
+The one you want to look at is probably "Tutorial.ipynb".
+
 # Setup
 
 You need Python 2.7 or 3.x, latter preferred. If you don't already have it, an
