@@ -156,6 +156,7 @@ class Treemap(D3PlusViz):
             value=format_js_value(self.value),
             color=format_js_value(self.color),
             text=format_js_value(self.name),
+            tooltip=format_js_value(self.tooltip)
         )
 
         return Javascript(lib=self.JS_LIBS, data=js)
