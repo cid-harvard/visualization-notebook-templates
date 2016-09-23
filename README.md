@@ -3,9 +3,7 @@ A set of iPython notebooks that can be used to generate some of the most common
 atlas-style interactive visualizations with any old dataset, and also to be
 able to dump them as embeddable html snippets.
 
-The one you want to look at is probably "Tutorial.ipynb".
-
-# Setup
+# Setup (10-15 minutes - one time)
 
 You need Python 2.7 or 3.x, latter preferred. If you don't already have it, an
 easy way to get it is to install
@@ -34,17 +32,32 @@ don't want to install packages globally and instead keep packages for each
 project separate.
 
 # Running the notebooks in Jupyter
-To make your life easier, you probably want to launch Jupyter from the terminal
-in the directory you clone this repository to. (As a reminder, you can read
-about using the terminal
-[here](http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything)).
-After you've used `cd` to get to the directory you want, you just run `jupyter
-notebook`.
 
-Then, your browser will pop up a new window with a file browser, and you can
-click into the notebook you like.
+Note: Unfortunately you can't just double-click a file and get it to launch
+jupyter, you have to do it in this order.
 
-# Viewing the notebooks on the web
+1. *Copy the notebooks to your computer*: To do that, scroll to the top of the
+   page and hit the big green "Clone or Download" button. If you don't know how
+   to use git, you can just hit the "Download Zip" button. Otherwise, feel free
+   to do whatever works. You can place this directory wherever you want.
+
+2. *Run Jupyter*:  To make your life easier, you probably want to launch
+   Jupyter from the terminal in the directory you downloaded this repository
+   to. (As a reminder, you can read about using the terminal
+   [here](http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything)).
+   After you've used `cd` to get to the directory you copied the stuff to, you
+   just run `jupyter notebook`.
+
+   Anaconda has its own way of launching jupyter too, in that case you can use
+   the file browser that pops up to navigate to the directory you downloaded
+   the notebooks to.
+
+3. *Load the notebooks*: Then, your browser will pop up a new window with a
+   file browser, and you can click into the notebook you like. Start with
+   Tutorial.ipynb
+
+
+# Viewing notebooks on the web
 Github has some functionality to view the notebooks (but not run them) on the
 web, so you can see what's in them. Unfortunately it's bad at rendering the
 actual visualizations themselves. What you can do is go to
