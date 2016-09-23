@@ -224,7 +224,9 @@ class ProductSpace(D3PlusViz):
     HS_GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_hs4_codes.json")).read()
     SITC_GRAPH_DATA = open(os.path.join(path, "../classifications/atlas_international_product_space_sitc_codes.json")).read()
 
-    def __init__(self, id='id', name=None, color=None, size=10, graph_data=None, presence="M", spotlight=True, tooltip=[]):
+    def __init__(self, id='id', name=None, color=None, size=10,
+                 graph_data=None, presence="M", spotlight=True,
+                 tooltip=[], node_property="nodes", edge_property="edges"):
         super(ProductSpace, self).__init__()
         self.id = id
         if name is None:
@@ -243,6 +245,8 @@ class ProductSpace(D3PlusViz):
         self.presence = presence
         self.spotlight = spotlight
         self.tooltip = tooltip
+        self.node_property = node_property
+        self.edge_property = edge_property
 
     def preprocess_data(self, data):
         return data
@@ -262,8 +266,8 @@ class ProductSpace(D3PlusViz):
           .labels(false)
           .container({container})
           .type("network")
-          .nodes(graph_data.nodes)
-          .edges(graph_data.links)
+          .nodes(graph_data.{node_property})
+          .edges(graph_data.{edge_property})
           .size({size})
           .active({{
             "value": function(d){{
@@ -288,7 +292,9 @@ class ProductSpace(D3PlusViz):
                    spotlight=format_js_value(self.spotlight),
                    color=format_js_value(self.color),
                    text=format_js_value(self.name),
-                   tooltip=format_js_value(self.tooltip)
+                   tooltip=format_js_value(self.tooltip),
+                   node_property=format_js_value(RawJavascript(self.node_property)),
+                   edge_property=format_js_value(RawJavascript(self.edge_property))
                    )
 
         return Javascript(lib=self.JS_LIBS, data=js)
