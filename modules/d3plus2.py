@@ -7,6 +7,11 @@ import os
 path = os.path.dirname(__file__)
 
 
+def rgb2hexcolor(r, g, b):
+    """Convert 3 integer r, g, b values into hexadecimal #ff00ac format color."""
+    return '#' + ''.join('{:02x}'.format(a) for a in [int(r), int(g), int(b)])
+
+
 class RawJavascript(str):
     """Placeholder class that's the same as a string BUT is treated specially
     by format_js_value and not quoted."""
@@ -249,7 +254,7 @@ class ProductSpace(D3PlusViz):
         self.edge_property = edge_property
 
     def preprocess_data(self, data):
-        return data
+        return data.rename_axis({self.id: "id"}, axis=1)
 
     def generate_js(self, json_data):
 
@@ -287,7 +292,7 @@ class ProductSpace(D3PlusViz):
                    graph_data=format_js_value(RawJavascript(self.graph_data)),
                    container=format_js_value('#' + self.container_id),
                    size=format_js_value(self.size),
-                   id=format_js_value(self.id),
+                   id=format_js_value("id"),
                    presence=format_js_value(RawJavascript(self.presence)),
                    spotlight=format_js_value(self.spotlight),
                    color=format_js_value(self.color),
