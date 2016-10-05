@@ -3,6 +3,8 @@ import json
 import random
 import pandas as pd
 
+import pprint
+
 import os
 path = os.path.dirname(__file__)
 
@@ -255,6 +257,18 @@ class ProductSpace(D3PlusViz):
 
     def preprocess_data(self, data):
         return data.rename_axis({self.id: "id"}, axis=1)
+
+    def network_help(self):
+        net_obj = json.loads(self.graph_data)
+        nodes = net_obj[self.node_property]
+        edges = net_obj[self.edge_property]
+
+        print("ID key: ", self.id)
+
+        print("Node example: \n", pprint.pformat(nodes[0]))
+        print("Edge example: \n", pprint.pformat(edges[0]))
+
+        print("Node values: \n", [x[self.id] for x in nodes])
 
     def generate_js(self, json_data):
 
