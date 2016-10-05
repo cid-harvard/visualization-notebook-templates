@@ -233,7 +233,7 @@ class ProductSpace(D3PlusViz):
 
     def __init__(self, id='id', name=None, color=None, size=10,
                  graph_data=None, presence="M", spotlight=True,
-                 tooltip=[], node_property="nodes", edge_property="edges"):
+                 tooltip=[], node_property="nodes", edge_property="edges", network_id="id"):
         super(ProductSpace, self).__init__()
         self.id = id
         if name is None:
@@ -254,9 +254,10 @@ class ProductSpace(D3PlusViz):
         self.tooltip = tooltip
         self.node_property = node_property
         self.edge_property = edge_property
+        self.network_id = network_id
 
     def preprocess_data(self, data):
-        return data.rename_axis({self.id: "id"}, axis=1)
+        return data.rename_axis({self.id: self.network_id}, axis=1)
 
     def network_help(self):
         net_obj = json.loads(self.graph_data)
@@ -264,6 +265,7 @@ class ProductSpace(D3PlusViz):
         edges = net_obj[self.edge_property]
 
         print("ID key: ", self.id)
+        print("Network ID key: ", self.network_id)
 
         print("Node example: \n", pprint.pformat(nodes[0]))
         print("Edge example: \n", pprint.pformat(edges[0]))
@@ -306,7 +308,7 @@ class ProductSpace(D3PlusViz):
                    graph_data=format_js_value(RawJavascript(self.graph_data)),
                    container=format_js_value('#' + self.container_id),
                    size=format_js_value(self.size),
-                   id=format_js_value("id"),
+                   id=format_js_value(self.network_id),
                    presence=format_js_value(RawJavascript(self.presence)),
                    spotlight=format_js_value(self.spotlight),
                    color=format_js_value(self.color),
